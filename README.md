@@ -10,14 +10,15 @@ works and spend your effort on packaging, serving, and deployment.
 
 ## What this repo gives you
 
-- The **file layout** for a Phase 2 (ship) project. Every file is empty — you write all of it,
-  including `pyproject.toml` and adding the **Adult / Census Income** data yourself.
-- A target to build toward: the serving package and the `train.py` that produces your model
-  artifact (`model/model.joblib`). Carry these forward from your Phase 1 project, then build
-  the serving, container, deployment, and infrastructure layers around the artifact.
+- A **working package and a `train.py`** for **Adult / Census Income** — the frozen Phase 1
+  build. **To get your model, run `python train.py`** (after `pip install -e .`); it writes
+  `model/model.joblib`, the artifact your serving layer loads. The package does not change
+  from here; you build *around* it.
+- The **empty serving, container, deployment, and infrastructure files** for you to write
+  (`serve.py`, `Dockerfile`, `compose.yaml`, the frontend, the infra).
 - The reference shape to read is
   [`v2.1.0`](https://github.com/adutchengineer/ml-pipeline-starter/releases/tag/v2.1.0) of the
-  `ml-pipeline-starter` reference — read it to see the package shape, do not fork it.
+  `ml-pipeline-starter` reference — read it, do not fork it.
 
 ## What you build on it
 
@@ -35,47 +36,45 @@ from.
 
 ## Approximate structure to build out
 
-This is the shape your repo grows into across M5–M9. Every `.py` file is empty — you write
-all of it — including `pyproject.toml` and the data loading. The repo gives you the file
-layout and nothing else; the code is yours. Names are a guide, not a rule — match the layout, not the
-spelling.
+The **package, `train.py`, the data, and `pyproject.toml` are given** — that is the model.
+The serving and deployment files are empty; you write them. Names are a guide, not a rule.
 
 ```
 phase2-starter/
-├── pyproject.toml           # package metadata + deps              (you write)
+├── pyproject.toml           # installable package metadata + deps    (given)
 ├── README.md
 ├── .gitignore
-├── data/                    # add the Adult / Census CSV here       (you add)
-│   └── adult_census.csv     # the Adult / Census Income data        (you add)
-├── model/                   # your produced artifact lands here
-├── train.py                 # produce model/model.joblib            (you write)
+├── train.py                 # run it to produce model/model.joblib   (given)
+├── data/
+│   └── adult_census.csv     # the Adult / Census Income data          (given)
+├── model/                   # `python train.py` writes model.joblib here
 ├── src/
-│   └── census_pipeline/     # the package — you write all of it     (you write)
+│   └── census_pipeline/     # the frozen serving package              (given)
 │       ├── __init__.py
 │       ├── data.py
 │       ├── features.py
 │       ├── split.py
 │       ├── model.py
 │       ├── artifact.py
-│       ├── serve.py         # FastAPI app: /predict + batch (M6)
-│       └── schema.py        # request/response schemas (M6)
-├── .dockerignore            # deterministic build context (M5)
-├── Dockerfile               # reproducible, slim image (M5)
-├── compose.yaml             # the stack: service + a dependency (M5)
-├── frontend/index.html      # minimal UI consuming the API (M7)
-└── infra/main.tf            # infrastructure as code (M9)
+│       ├── serve.py         # FastAPI app: /predict + batch (M6)      (you write)
+│       └── schema.py        # request/response schemas (M6)           (you write)
+├── .dockerignore            # deterministic build context (M5)        (you write)
+├── Dockerfile               # reproducible, slim image (M5)           (you write)
+├── compose.yaml             # the stack: service + a dependency (M5)  (you write)
+├── frontend/index.html      # minimal UI consuming the API (M7)       (you write)
+└── infra/main.tf            # infrastructure as code (M9)             (you write)
 ```
 
 ## Fill in
 
-Every file in this repo is empty except this README. You write all of it — `pyproject.toml`,
-the package code, and adding the Adult / Census data yourself. The list below is what each empty file becomes, in the module that
-fills it.
+First produce your model from the given code:
 
-**Carried in from Phase 1 (your build modules)**
-- `train.py` and `src/census_pipeline/{__init__,data,features,split,model,artifact}.py` — the
-  package and the script that produces `model/model.joblib`. Bring these forward from your
-  Phase 1 project, or rebuild them here; the serving work loads the artifact they produce.
+```bash
+pip install -e .
+python train.py        # writes model/model.joblib
+```
+
+Then build these empty files, each on its own branch:
 
 **Module 5 — Packaging & Reproducibility**
 - `Dockerfile` — a reproducible, slim image that loads the artifact and scores a record.
