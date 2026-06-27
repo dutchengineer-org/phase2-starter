@@ -20,17 +20,44 @@ works and spend your effort on packaging, serving, and deployment.
 
 ## What you build on it
 
-| Module | What you add |
-|---|---|
-| M5 — Packaging & Reproducibility | A reproducible, slim Docker image that builds from scratch and scores a record. |
-| M6 — APIs & Model Serving | A schema-validated `/predict` endpoint plus a batch path. |
-| M7 — Frontend & ML Product Thinking | A minimal frontend that consumes the API and presents predictions honestly. |
-| M8 — Cloud Deployment | The product deployed publicly with dev→prod promotion and a working rollback. |
-| M9 — Infrastructure as Code | The service's infrastructure declared in version-controlled code. |
+| Module | What you add | Lesson |
+|---|---|---|
+| M5 — Packaging & Reproducibility | A reproducible, slim Docker image that builds from scratch and scores a record. | https://learn.dutchengineer.org/courses/packaging-reproducibility/ |
+| M6 — APIs & Model Serving | A schema-validated `/predict` endpoint plus a batch path. | https://learn.dutchengineer.org/courses/apis-model-serving/ |
+| M7 — Frontend & ML Product Thinking | A minimal frontend that consumes the API and presents predictions honestly. | https://learn.dutchengineer.org/courses/frontend-ml-product/ |
+| M8 — Cloud Deployment | The product deployed publicly with dev→prod promotion and a working rollback. | https://learn.dutchengineer.org/courses/cloud-deployment/ |
+| M9 — Infrastructure as Code | The service's infrastructure declared in version-controlled code. | https://learn.dutchengineer.org/courses/infrastructure-as-code/ |
 
 By the end of Module 8 the product is live on the internet; by Module 9 its infrastructure
 is reproducible. This deployed service is what the **Phase 3 (operate)** starter is built
 from.
+
+## Approximate structure to build out
+
+This is the shape your repo grows into across M5–M9. The starter ships the trained model and
+package; you add the serving, container, deployment, and infrastructure layers. Names are a
+guide, not a rule — match the layout, not the spelling.
+
+```
+phase2-starter/
+├── pyproject.toml           # the frozen v2.1.0 package + pinned deps
+├── README.md
+├── .gitignore
+├── .dockerignore            # deterministic build context (M5)
+├── Dockerfile               # reproducible, slim image that scores a record (M5)
+├── compose.yaml             # the stack: service + a real dependency (M5)
+├── model/
+│   └── model.joblib         # the trained, calibrated artifact (given)
+├── src/
+│   └── <yourpkg>/
+│       ├── __init__.py      # the frozen serving package
+│       ├── serve.py         # FastAPI app: /predict + batch path (M6)
+│       └── schema.py        # request/response schemas, leakage features excluded (M6)
+├── frontend/                # minimal UI consuming the API (M7)
+│   └── index.html
+└── infra/                   # infrastructure as code for the deployed service (M9)
+    └── main.tf
+```
 
 ## How to use it
 
