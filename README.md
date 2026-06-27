@@ -36,17 +36,17 @@ from.
 ## Approximate structure to build out
 
 This is the shape your repo grows into across M5–M9. Every `.py` file is empty — you write
-all of it. The repo gives you the layout, an installable `pyproject.toml`, and the Adult /
-Census data; the code is yours. Names are a guide, not a rule — match the layout, not the
+all of it — including `pyproject.toml` and the data loading. The repo gives you the file
+layout and nothing else; the code is yours. Names are a guide, not a rule — match the layout, not the
 spelling.
 
 ```
 phase2-starter/
-├── pyproject.toml           # installable package metadata + deps    (provided)
+├── pyproject.toml           # package metadata + deps              (you write)
 ├── README.md
 ├── .gitignore
-├── data/
-│   └── adult_census.csv     # the Adult / Census Income data         (provided)
+├── data/                    # add the Adult / Census CSV here       (you add)
+│   └── adult_census.csv     # the Adult / Census Income data        (you add)
 ├── model/                   # your produced artifact lands here
 ├── train.py                 # produce model/model.joblib            (you write)
 ├── src/
@@ -68,8 +68,8 @@ phase2-starter/
 
 ## Fill in
 
-Every file in this repo is empty except `pyproject.toml`, the Adult data, and this README.
-You write all the code. The list below is what each empty file becomes, in the module that
+Every file in this repo is empty except this README. You write all of it — `pyproject.toml`,
+the package code, and adding the Adult / Census data yourself. The list below is what each empty file becomes, in the module that
 fills it.
 
 **Carried in from Phase 1 (your build modules)**
