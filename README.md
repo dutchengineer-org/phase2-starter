@@ -34,30 +34,64 @@ from.
 
 ## Approximate structure to build out
 
-This is the shape your repo grows into across M5–M9. The starter ships the trained model and
-package; you add the serving, container, deployment, and infrastructure layers. Names are a
-guide, not a rule — match the layout, not the spelling.
+This is the shape your repo grows into across M5–M9. The starter ships the **frozen package
+and a `train.py` that produces the model**; you add the serving, container, deployment, and
+infrastructure layers. Names are a guide, not a rule — match the layout, not the spelling.
 
 ```
 phase2-starter/
-├── pyproject.toml           # the frozen v2.1.0 package + pinned deps
+├── pyproject.toml           # the frozen v2.1.0 package + deps        (given)
 ├── README.md
 ├── .gitignore
-├── .dockerignore            # deterministic build context (M5)
-├── Dockerfile               # reproducible, slim image that scores a record (M5)
-├── compose.yaml             # the stack: service + a real dependency (M5)
+├── train.py                 # run it to produce model/model.joblib   (given)
+├── data/
+│   └── adult_census.csv     # the Adult / Census Income data          (given)
 ├── model/
-│   └── model.joblib         # the trained, calibrated artifact (given)
+│   └── model.joblib         # produced by `python train.py`           (generated)
 ├── src/
-│   └── <yourpkg>/
-│       ├── __init__.py      # the frozen serving package
-│       ├── serve.py         # FastAPI app: /predict + batch path (M6)
-│       └── schema.py        # request/response schemas, leakage features excluded (M6)
-├── frontend/                # minimal UI consuming the API (M7)
-│   └── index.html
-└── infra/                   # infrastructure as code for the deployed service (M9)
-    └── main.tf
+│   └── census_pipeline/     # the frozen serving package              (given)
+│       ├── __init__.py
+│       ├── data.py
+│       ├── features.py
+│       ├── split.py
+│       ├── model.py
+│       └── artifact.py
+├── .dockerignore            # deterministic build context (M5)        (you write)
+├── Dockerfile               # reproducible, slim image (M5)           (you write)
+├── compose.yaml             # the stack: service + a dependency (M5)  (you write)
+├── src/census_pipeline/
+│   ├── serve.py             # FastAPI app: /predict + batch (M6)      (you write)
+│   └── schema.py            # request/response schemas (M6)           (you write)
+├── frontend/index.html      # minimal UI consuming the API (M7)       (you write)
+└── infra/main.tf            # infrastructure as code (M9)             (you write)
 ```
+
+## Fill in
+
+The **given** files are complete and runnable — you do not edit the package. First produce
+your model artifact:
+
+```bash
+pip install -e .
+python train.py        # writes model/model.joblib
+```
+
+Then build these empty files, each on its own branch:
+
+**Module 5 — Packaging & Reproducibility**
+- `Dockerfile` — a reproducible, slim image that loads the artifact and scores a record.
+- `.dockerignore` — keep the build context deterministic.
+- `compose.yaml` — bring up the service plus a real dependency (e.g. Postgres) on one command.
+
+**Module 6 — APIs & Model Serving**
+- `src/census_pipeline/schema.py` — request/response schemas; exclude any leakage feature.
+- `src/census_pipeline/serve.py` — a FastAPI app exposing `/predict` and a batch path, loading `model/model.joblib`.
+
+**Module 7 — Frontend & ML Product Thinking**
+- `frontend/index.html` — a minimal UI that calls the API and presents probabilities honestly.
+
+**Module 9 — Infrastructure as Code**
+- `infra/main.tf` — the deployed service's infrastructure declared as code.
 
 ## How to use it
 

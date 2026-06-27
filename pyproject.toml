@@ -1,0 +1,18 @@
+[project]
+name = "census-pipeline"
+version = "2.1.0"
+description = "Phase 2 serving package (frozen v2.1.0) for Adult / Census Income. DutchEngineer track."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = ["pandas", "scikit-learn", "joblib"]
+
+[project.urls]
+Homepage = "https://learn.dutchengineer.org"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
