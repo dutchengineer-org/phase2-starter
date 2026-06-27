@@ -10,8 +10,8 @@ works and spend your effort on packaging, serving, and deployment.
 
 ## What this repo gives you
 
-- The **file layout** for a Phase 2 (ship) project, an installable `pyproject.toml`, and the
-  **Adult / Census Income** data. Every `.py` file is empty — you write the code.
+- The **file layout** for a Phase 2 (ship) project. Every file is empty — you write all of it,
+  including `pyproject.toml` and adding the **Adult / Census Income** data yourself.
 - A target to build toward: the serving package and the `train.py` that produces your model
   artifact (`model/model.joblib`). Carry these forward from your Phase 1 project, then build
   the serving, container, deployment, and infrastructure layers around the artifact.
