@@ -10,13 +10,14 @@ works and spend your effort on packaging, serving, and deployment.
 
 ## What this repo gives you
 
-- A **trained model artifact** for the **Adult / Census Income** data — a serialized,
-  calibrated model that loads and predicts, the same shape Module 4 produced.
-- The **working package** that produced it. The package matches the reference shape frozen
-  at [`v2.1.0`](https://github.com/adutchengineer/ml-pipeline-starter/releases/tag/v2.1.0)
-  — the final version of the `ml-pipeline-starter` reference. **The package does not change
-  again from here**; every Phase 2 module builds *around* this artifact rather than growing
-  the package.
+- The **file layout** for a Phase 2 (ship) project, an installable `pyproject.toml`, and the
+  **Adult / Census Income** data. Every `.py` file is empty — you write the code.
+- A target to build toward: the serving package and the `train.py` that produces your model
+  artifact (`model/model.joblib`). Carry these forward from your Phase 1 project, then build
+  the serving, container, deployment, and infrastructure layers around the artifact.
+- The reference shape to read is
+  [`v2.1.0`](https://github.com/adutchengineer/ml-pipeline-starter/releases/tag/v2.1.0) of the
+  `ml-pipeline-starter` reference — read it to see the package shape, do not fork it.
 
 ## What you build on it
 
@@ -34,49 +35,47 @@ from.
 
 ## Approximate structure to build out
 
-This is the shape your repo grows into across M5–M9. The starter ships the **frozen package
-and a `train.py` that produces the model**; you add the serving, container, deployment, and
-infrastructure layers. Names are a guide, not a rule — match the layout, not the spelling.
+This is the shape your repo grows into across M5–M9. Every `.py` file is empty — you write
+all of it. The repo gives you the layout, an installable `pyproject.toml`, and the Adult /
+Census data; the code is yours. Names are a guide, not a rule — match the layout, not the
+spelling.
 
 ```
 phase2-starter/
-├── pyproject.toml           # the frozen v2.1.0 package + deps        (given)
+├── pyproject.toml           # installable package metadata + deps    (provided)
 ├── README.md
 ├── .gitignore
-├── train.py                 # run it to produce model/model.joblib   (given)
 ├── data/
-│   └── adult_census.csv     # the Adult / Census Income data          (given)
-├── model/
-│   └── model.joblib         # produced by `python train.py`           (generated)
+│   └── adult_census.csv     # the Adult / Census Income data         (provided)
+├── model/                   # your produced artifact lands here
+├── train.py                 # produce model/model.joblib            (you write)
 ├── src/
-│   └── census_pipeline/     # the frozen serving package              (given)
+│   └── census_pipeline/     # the package — you write all of it     (you write)
 │       ├── __init__.py
 │       ├── data.py
 │       ├── features.py
 │       ├── split.py
 │       ├── model.py
-│       └── artifact.py
-├── .dockerignore            # deterministic build context (M5)        (you write)
-├── Dockerfile               # reproducible, slim image (M5)           (you write)
-├── compose.yaml             # the stack: service + a dependency (M5)  (you write)
-├── src/census_pipeline/
-│   ├── serve.py             # FastAPI app: /predict + batch (M6)      (you write)
-│   └── schema.py            # request/response schemas (M6)           (you write)
-├── frontend/index.html      # minimal UI consuming the API (M7)       (you write)
-└── infra/main.tf            # infrastructure as code (M9)             (you write)
+│       ├── artifact.py
+│       ├── serve.py         # FastAPI app: /predict + batch (M6)
+│       └── schema.py        # request/response schemas (M6)
+├── .dockerignore            # deterministic build context (M5)
+├── Dockerfile               # reproducible, slim image (M5)
+├── compose.yaml             # the stack: service + a dependency (M5)
+├── frontend/index.html      # minimal UI consuming the API (M7)
+└── infra/main.tf            # infrastructure as code (M9)
 ```
 
 ## Fill in
 
-The **given** files are complete and runnable — you do not edit the package. First produce
-your model artifact:
+Every file in this repo is empty except `pyproject.toml`, the Adult data, and this README.
+You write all the code. The list below is what each empty file becomes, in the module that
+fills it.
 
-```bash
-pip install -e .
-python train.py        # writes model/model.joblib
-```
-
-Then build these empty files, each on its own branch:
+**Carried in from Phase 1 (your build modules)**
+- `train.py` and `src/census_pipeline/{__init__,data,features,split,model,artifact}.py` — the
+  package and the script that produces `model/model.joblib`. Bring these forward from your
+  Phase 1 project, or rebuild them here; the serving work loads the artifact they produce.
 
 **Module 5 — Packaging & Reproducibility**
 - `Dockerfile` — a reproducible, slim image that loads the artifact and scores a record.
@@ -94,6 +93,7 @@ Then build these empty files, each on its own branch:
 - `infra/main.tf` — the deployed service's infrastructure declared as code.
 
 ## How to use it
+
 
 1. **Fork** this repo to your own account.
 2. Clone your fork locally and build to each module's spec and rubric.
