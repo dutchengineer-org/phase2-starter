@@ -96,7 +96,7 @@ Then build these empty files, each on its own branch:
 
 1. **Fork** this repo to your own account.
 2. Clone your fork locally and build to each module's spec and rubric.
-3. Work on a **branch** per module (`git checkout -b m5-docker`), open a pull request, and
+3. Work on a **branch** per module (`git checkout -b m5-docker-image`), open a pull request, and
    merge to `main` once it meets the rubric.
 
 ## The reference
